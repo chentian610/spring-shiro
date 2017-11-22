@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cf.dao.BusCheckDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.cf.entity.BusCheckEntity" id="busCheckMap">
+        <result property="id" column="id"/>
+        <result property="ruleId" column="rule_id"/>
+        <result property="voiceUrl" column="voice_url"/>
+        <result property="speedText" column="speed_text"/>
+        <result property="matchDegree" column="match_degree"/>
+        <result property="createDate" column="create_date"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.cf.entity.BusCheckEntity">
+		select * from bus_check where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.cf.entity.BusCheckEntity">
+		select * from bus_check
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from bus_check 
+	</select>
+	 
+	<insert id="save" parameterType="com.cf.entity.BusCheckEntity">
+		insert into bus_check
+		(
+			`id`, 
+			`rule_id`, 
+			`voice_url`, 
+			`speed_text`, 
+			`match_degree`, 
+			`create_date`
+		)
+		values
+		(
+			#{id}, 
+			#{ruleId}, 
+			#{voiceUrl}, 
+			#{speedText}, 
+			#{matchDegree}, 
+			#{createDate}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.cf.entity.BusCheckEntity">
+		update bus_check 
+		<set>
+			<if test="ruleId != null">`rule_id` = #{ruleId}, </if>
+			<if test="voiceUrl != null">`voice_url` = #{voiceUrl}, </if>
+			<if test="speedText != null">`speed_text` = #{speedText}, </if>
+			<if test="matchDegree != null">`match_degree` = #{matchDegree}, </if>
+			<if test="createDate != null">`create_date` = #{createDate}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from bus_check where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from bus_check where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

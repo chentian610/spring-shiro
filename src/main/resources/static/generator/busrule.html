@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="../public/css/bootstrap.min.css">
+<link rel="stylesheet" href="../public/css/font-awesome.min.css">
+<link rel="stylesheet" href="../public/plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet" href="../public/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../public/css/main.css">
+<script src="../public/libs/jquery.min.js"></script>
+<script src="../public/plugins/layer/layer.js"></script>
+<script src="../public/libs/bootstrap.min.js"></script>
+<script src="../public/libs/vue.min.js"></script>
+<script src="../public/plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../public/plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../public/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../public/js/common.js"></script>
+<script src="../public/js/HZRecorder.js"></script>
+</head>
+<body>
+<div id="rrapp" v-cloak v-show="!showDetail">
+	<div v-show="showList">
+		<div class="grid-btn">
+			<a v-if="hasPermission('busrule:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<a v-if="hasPermission('busrule:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			<a v-if="hasPermission('busrule:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+
+			<a v-if="hasPermission('busrule:info')" class="btn btn-primary" @click="startRecording(this);"><i class="fa fa-trash-o" id="btnStart"></i>&nbsp;录音</a>
+			<a v-if="hasPermission('busrule:info')" class="btn btn-primary" @click="stopRecording(this);"><i class="fa fa-trash-o" id="btnStop"></i>&nbsp;停止</a>
+			<a v-if="hasPermission('busrule:info')" class="btn btn-primary" @click="playRecording(this);"><i class="fa fa-trash-o" id="btnPlay"></i>&nbsp;播放</a>
+			<a v-if="hasPermission('busrule:info')" class="btn btn-primary" @click="uploadAudio(this);" id="btnUpload"><i class="fa fa-upload"></i>&nbsp;上传质检</a>
+			<a v-if="hasPermission('busrulelist:delete')" class="btn btn-primary pull-right" @click="openDetail"><i class="fa"></i>&nbsp;规则权重设置</a>
+			<div id="recordingslist"></div>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label"></div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="busRule.insuranceType" placeholder=""/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label"></div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="busRule.ruleText" placeholder=""/>
+			    </div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div id="rrappDetail" v-cloak v-show="showDetail">
+	<div v-show="showList">
+		<div class="grid-btn">
+			<a v-if="hasPermission('busrulelist:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<a v-if="hasPermission('busrulelist:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			<a v-if="hasPermission('busrulelist:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			<a v-if="hasPermission('busrulelist:delete')" class="btn btn-primary pull-right" @click="backMain"><i class="fa"></i>&nbsp;返回</a>
+		</div>
+		<table id="jqGridDetail"></table>
+		<div id="jqGridPagerDetail"></div>
+	</div>
+
+	<div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" disabled>
+				<div class="col-sm-2 control-label">规则ID</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="busRuleList.ruleId" placeholder="规则ID"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">规则文本</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="busRuleList.ruleText" placeholder="规则文本"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">例子</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="busRuleList.demoText" placeholder="例子"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">权重(-1代表匹配到则0分)</div>
+				<div class="col-sm-10">
+					<input type="number" max="20" min="-1" class="form-control" v-model="busRuleList.weight" placeholder="权重"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div>
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="../public/js/generator/busrule.js"></script>
+<script src="../public/js/generator/busrulelist.js"></script>
+<script src="../public/js/generator/recordMatch.js"></script>
+</body>
+</html>

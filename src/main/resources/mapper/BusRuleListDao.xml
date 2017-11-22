@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cf.dao.BusRuleListDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.cf.entity.BusRuleListEntity" id="busRuleListMap">
+        <result property="id" column="id"/>
+        <result property="ruleId" column="rule_id"/>
+        <result property="ruleText" column="rule_text"/>
+        <result property="demoText" column="demo_text"/>
+        <result property="standardText" column="standard_text"/>
+        <result property="weight" column="weight"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.cf.entity.BusRuleListEntity">
+		select * from bus_rule_list where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.cf.entity.BusRuleListEntity">
+		select * from bus_rule_list
+		<where>
+			<if test="ruleId != null and ruleId != 0">
+				rule_id = #{ruleId}
+			</if>
+		</where>
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<!--<otherwise>-->
+				<!--order by id desc-->
+			<!--</otherwise>-->
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from bus_rule_list 
+	</select>
+	 
+	<insert id="save" parameterType="com.cf.entity.BusRuleListEntity">
+		insert into bus_rule_list
+		(
+			`id`, 
+			`rule_id`, 
+			`rule_text`, 
+			`demo_text`, 
+			`standard_text`, 
+			`weight`, 
+			`create_time`, 
+			`create_by`, 
+			`update_time`, 
+			`update_by`, 
+			`version`
+		)
+		values
+		(
+			#{id}, 
+			#{ruleId}, 
+			#{ruleText}, 
+			#{demoText}, 
+			#{standardText}, 
+			#{weight}, 
+			#{createTime}, 
+			#{createBy}, 
+			#{updateTime}, 
+			#{updateBy}, 
+			#{version}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.cf.entity.BusRuleListEntity">
+		update bus_rule_list 
+		<set>
+			<if test="ruleId != null">`rule_id` = #{ruleId}, </if>
+			<if test="ruleText != null">`rule_text` = #{ruleText}, </if>
+			<if test="demoText != null">`demo_text` = #{demoText}, </if>
+			<if test="standardText != null">`standard_text` = #{standardText}, </if>
+			<if test="weight != null">`weight` = #{weight}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="createBy != null">`create_by` = #{createBy}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="updateBy != null">`update_by` = #{updateBy}, </if>
+			<if test="version != null">`version` = #{version}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from bus_rule_list where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from bus_rule_list where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>vue.js 简单多图上传图片</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<style type="text/css">
+
+		ul { list-style: none outside none; margin:0; padding: 0; }
+		li { margin: 0 10px; display: inline; }
+		#app{
+			overflow: hidden;
+			text-align: center;
+			margin-top: 10%;
+		}
+		img {
+			width: 100px;
+			height: 100px;
+			margin: auto;
+			display: inline;
+			margin-bottom: 10px;
+		}
+	</style>
+	<script src="../public/libs/vue.min.js"></script>
+	<script src="../public/libs/jquery.min.js"></script>
+	<!-- 新 Bootstrap 核心 CSS 文件 -->
+	<script src="../public/libs/bootstrap.min.js"></script>
+
+
+</head>
+<body>
+<div id="app">
+
+	<div style="margin-bottom: 20px">
+		<h2>选择图片</h2>
+		<a id='addPic' href="" @click="addPic">添加图片 </a>
+		<input type="file" @change="onFileChange" multiple style="display: none;">
+	</div>
+	<div v-if="images.length >0">
+		<ul>
+			<li v-for="(key,image) in images">
+
+				<img :src="image" @click='delImage(key)' />
+				<a href="#" style="position: absolute;" @click='delImage(key)'>
+					<span class="glyphicon glyphicon-remove"></span>
+				</a>
+			</li>
+		</ul>
+		<button @click="removeImage">移除全部图片</button>
+		<button @click='uploadImage' >上传</button>
+	</div>
+</div>
+<script type="text/javascript">
+
+</script>
+<script src="../public/js/generator/duowenjian.js"></script>
+</body>
+
+</html>
