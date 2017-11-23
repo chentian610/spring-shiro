@@ -4,9 +4,8 @@ $(function () {
         datatype: "local",
         colModel: [
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true ,hidden : true},
-			{ label: '规则ID', name: 'ruleId', index: 'rule_id', width: 80 }, 			
-			{ label: '规则文本', name: 'ruleText', index: 'rule_text', width: 300 },
-			{ label: '例子', name: 'demoText', index: 'demo_text', width: 300 },
+			{ label: '规则ID', name: 'ruleId', index: 'rule_id', width: 80 },
+			{ label: '规则例子', name: 'demoText', index: 'demo_text', width: 300 },
 			{ label: '权重', name: 'weight', index: 'weight', width: 80 }
         ],
 		viewrecords: true,

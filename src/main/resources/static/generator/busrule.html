@@ -28,10 +28,10 @@
 			<a v-if="hasPermission('busrule:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
 			<a v-if="hasPermission('busrule:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
 
-			<a v-if="hasPermission('busrule:info')" class="btn btn-primary" @click="startRecording(this);"><i class="fa fa-trash-o" id="btnStart"></i>&nbsp;录音</a>
-			<a v-if="hasPermission('busrule:info')" class="btn btn-primary" @click="stopRecording(this);"><i class="fa fa-trash-o" id="btnStop"></i>&nbsp;停止</a>
-			<a v-if="hasPermission('busrule:info')" class="btn btn-primary" @click="playRecording(this);"><i class="fa fa-trash-o" id="btnPlay"></i>&nbsp;播放</a>
-			<a v-if="hasPermission('busrule:info')" class="btn btn-primary" @click="uploadAudio(this);" id="btnUpload"><i class="fa fa-upload"></i>&nbsp;上传质检</a>
+			<a v-if="hasPermission('busrule:info1')" class="btn btn-primary" @click="startRecording(this);"><i class="fa fa-trash-o" id="btnStart"></i>&nbsp;录音</a>
+			<a v-if="hasPermission('busrule:info1')" class="btn btn-primary" @click="stopRecording(this);"><i class="fa fa-trash-o" id="btnStop"></i>&nbsp;停止</a>
+			<a v-if="hasPermission('busrule:info1')" class="btn btn-primary" @click="playRecording(this);"><i class="fa fa-trash-o" id="btnPlay"></i>&nbsp;播放</a>
+			<a v-if="hasPermission('busrule:info1')" class="btn btn-primary" @click="uploadAudio(this);" id="btnUpload"><i class="fa fa-upload"></i>&nbsp;上传质检</a>
 			<a v-if="hasPermission('busrulelist:delete')" class="btn btn-primary pull-right" @click="openDetail"><i class="fa"></i>&nbsp;规则权重设置</a>
 			<div id="recordingslist"></div>
 		</div>
@@ -43,15 +43,15 @@
 		<div class="panel-heading">{{title}}</div>
 		<form class="form-horizontal">
 			<div class="form-group">
-			   	<div class="col-sm-2 control-label"></div>
+			   	<div class="col-sm-2 control-label">项目名称</div>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="busRule.insuranceType" placeholder=""/>
+			      <input type="text" class="form-control" v-model="busRule.insuranceType" placeholder="项目名称"/>
 			    </div>
 			</div>
 			<div class="form-group">
-			   	<div class="col-sm-2 control-label"></div>
+			   	<div class="col-sm-2 control-label">规则例子</div>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="busRule.ruleText" placeholder=""/>
+			      <input type="text" class="form-control" v-model="busRule.demoText" placeholder="规则例子"/>
 			    </div>
 			</div>
 			<div class="form-group">
@@ -69,7 +69,7 @@
 			<a v-if="hasPermission('busrulelist:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
 			<a v-if="hasPermission('busrulelist:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
 			<a v-if="hasPermission('busrulelist:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
-			<a v-if="hasPermission('busrulelist:delete')" class="btn btn-primary pull-right" @click="backMain"><i class="fa"></i>&nbsp;返回</a>
+			<a  class="btn btn-primary pull-right" @click="backMain"><i class="fa"></i>&nbsp;返回</a>
 		</div>
 		<table id="jqGridDetail"></table>
 		<div id="jqGridPagerDetail"></div>
@@ -81,23 +81,23 @@
 			<div class="form-group" disabled>
 				<div class="col-sm-2 control-label">规则ID</div>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" v-model="busRuleList.ruleId" placeholder="规则ID"/>
+					<input type="text" class="form-control" v-model="busRuleList.ruleId" placeholder="规则ID" readonly="true"/>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group" hidden="true">
 				<div class="col-sm-2 control-label">规则文本</div>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" v-model="busRuleList.ruleText" placeholder="规则文本"/>
 				</div>
 			</div>
 			<div class="form-group">
-				<div class="col-sm-2 control-label">例子</div>
+				<div class="col-sm-2 control-label">规则例子</div>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" v-model="busRuleList.demoText" placeholder="例子"/>
+					<input type="text" class="form-control" v-model="busRuleList.demoText" placeholder="规则例子"  readonly="true"/>
 				</div>
 			</div>
 			<div class="form-group">
-				<div class="col-sm-2 control-label">权重(-1代表匹配到则0分)</div>
+				<div class="col-sm-2 control-label">权重</div>
 				<div class="col-sm-10">
 					<input type="number" max="20" min="-1" class="form-control" v-model="busRuleList.weight" placeholder="权重"/>
 				</div>

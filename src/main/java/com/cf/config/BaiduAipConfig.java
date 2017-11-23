@@ -7,6 +7,8 @@ import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import java.util.Properties;
 
@@ -34,5 +36,12 @@ public class BaiduAipConfig {
         aipSpeech.setConnectionTimeoutInMillis(2000);
         aipSpeech.setSocketTimeoutInMillis(60000);
         return aipSpeech;
+    }
+
+    @Bean
+    MultipartResolver initMultipartResolver(){
+        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+        resolver.setDefaultEncoding("UTF-8");
+        return  resolver;
     }
 }

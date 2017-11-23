@@ -6,9 +6,12 @@
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.cf.entity.BusRuleSttListEntity" id="busRuleSttListMap">
         <result property="id" column="id"/>
+		<result property="voiceId" column="voice_id"/>
         <result property="ruleListId" column="rule_list_id"/>
-        <result property="salerId" column="saler_id"/>
+        <result property="salerName" column="saler_name"/>
+        <result property="demoText" column="demo_text"/>
         <result property="tts" column="tts"/>
+        <result property="weight" column="weight"/>
         <result property="score" column="score"/>
         <result property="createTime" column="create_time"/>
         <result property="createBy" column="create_by"/>
@@ -23,6 +26,11 @@
 
 	<select id="queryList" resultType="com.cf.entity.BusRuleSttListEntity">
 		select * from bus_rule_stt_list
+		<where>
+			<if test="ruleId != null and ruleId != 0">
+				rule_id = #{ruleId}
+			</if>
+		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -35,6 +43,19 @@
 			limit #{offset}, #{limit}
 		</if>
 	</select>
+
+	<select id="queryScoreByRuleListID" resultType="java.lang.Double">
+		select s.score from bus_rule_stt_list s where s.rule_list_id = #{ruleListId} and s.voice_id = #{voiceId}
+	</select>
+
+	<select id="queryListByRuleID" resultType="com.cf.entity.BusRuleSttListEntity">
+		select m.demo_text,m.weight,s.score as score from bus_rule_list m left join bus_rule_stt_list s on m.id = s.rule_list_id
+		<where>
+			<if test="ruleId != null and ruleId != 0">
+				m.rule_id = #{ruleId}
+			</if>
+		</where>
+	</select>
 	
  	<select id="queryTotal" resultType="int">
 		select count(*) from bus_rule_stt_list 
@@ -43,10 +64,13 @@
 	<insert id="save" parameterType="com.cf.entity.BusRuleSttListEntity">
 		insert into bus_rule_stt_list
 		(
-			`id`, 
+			`id`,
+			`voice_id`,
 			`rule_list_id`, 
-			`saler_id`, 
+			`saler_name`, 
+			`demo_text`, 
 			`tts`, 
+			`weight`, 
 			`score`, 
 			`create_time`, 
 			`create_by`, 
@@ -56,10 +80,13 @@
 		)
 		values
 		(
-			#{id}, 
+			#{id},
+			#{voiceId},
 			#{ruleListId}, 
-			#{salerId}, 
+			#{salerName}, 
+			#{demoText}, 
 			#{tts}, 
+			#{weight}, 
 			#{score}, 
 			#{createTime}, 
 			#{createBy}, 
@@ -73,8 +100,10 @@
 		update bus_rule_stt_list 
 		<set>
 			<if test="ruleListId != null">`rule_list_id` = #{ruleListId}, </if>
-			<if test="salerId != null">`saler_id` = #{salerId}, </if>
+			<if test="salerName != null">`saler_name` = #{salerName}, </if>
+			<if test="demoText != null">`demo_text` = #{demoText}, </if>
 			<if test="tts != null">`tts` = #{tts}, </if>
+			<if test="weight != null">`weight` = #{weight}, </if>
 			<if test="score != null">`score` = #{score}, </if>
 			<if test="createTime != null">`create_time` = #{createTime}, </if>
 			<if test="createBy != null">`create_by` = #{createBy}, </if>

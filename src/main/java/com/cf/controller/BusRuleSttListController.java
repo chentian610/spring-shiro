@@ -19,11 +19,11 @@ import com.cf.utils.R;
 
 
 /**
- * 
+ * 识别结果明细列表
  * 
  * @author cf
  * @email 100@qq.com
- * @date 2017-11-21 13:59:30
+ * @date 2017-11-22 19:25:59
  */
 @RestController
 @RequestMapping("busrulesttlist")
@@ -40,12 +40,21 @@ public class BusRuleSttListController {
 		//查询列表数据
         Query query = new Query(params);
 
-		List<BusRuleSttListEntity> busRuleSttListList = busRuleSttListService.queryList(query);
-		int total = busRuleSttListService.queryTotal(query);
+		List<BusRuleSttListEntity> busRuleSttListList = busRuleSttListService.queryListByRuleID(query);
+		int total = busRuleSttListList.size();
 		
 		PageUtils pageUtil = new PageUtils(busRuleSttListList, total, query.getLimit(), query.getPage());
 		
 		return R.ok().put("page", pageUtil);
+	}
+
+	/**
+	 * 列表
+	 */
+	@RequestMapping("/recognize")
+	@RequiresPermissions("busrulesttlist:recognize")
+	public R recognize(@RequestBody Integer[] ids){
+		return R.ok();
 	}
 	
 	

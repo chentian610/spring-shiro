@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>vue.js 简单多图上传图片</title>
+	<title>vue.js 简单多图上传音频</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<style type="text/css">
 
@@ -20,6 +20,9 @@
 			margin-bottom: 10px;
 		}
 	</style>
+	<link rel="stylesheet" href="../public/css/bootstrap.min.css">
+	<!-- 可选的Bootstrap主题文件（一般不用引入） -->
+	<link rel="stylesheet" href="../public/css/bootstrap-theme.min.css">
 	<script src="../public/libs/vue.min.js"></script>
 	<script src="../public/libs/jquery.min.js"></script>
 	<!-- 新 Bootstrap 核心 CSS 文件 -->
@@ -31,8 +34,8 @@
 <div id="app">
 
 	<div style="margin-bottom: 20px">
-		<h2>选择图片</h2>
-		<a id='addPic' href="" @click="addPic">添加图片 </a>
+		<h2>选择音频</h2>
+		<a id='addPic' href="" @click="addPic">添加音频 </a>
 		<input type="file" @change="onFileChange" multiple style="display: none;">
 	</div>
 	<div v-if="images.length >0">
@@ -45,8 +48,8 @@
 				</a>
 			</li>
 		</ul>
-		<button @click="removeImage">移除全部图片</button>
-		<button @click='uploadImage' >上传</button>
+		<button @click="removeImage">移除全部音频</button>
+		<button @click='uploadImage' >上传质检</button>
 	</div>
 </div>
 <script type="text/javascript">

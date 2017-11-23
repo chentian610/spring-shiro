@@ -138,8 +138,8 @@ $.jgrid.regional["cn"] = {
             ],
             AmPm : ["am","pm","上午","下午"],
             S: function (j) {return j < 11 || j > 13 ? ['st', 'nd', 'rd', 'th'][Math.min((j - 1) % 10, 3)] : 'th';},
-            srcformat: 'Y-m-d',
-            newformat: 'Y-m-d',
+            srcformat: 'Y-m-d.css',
+            newformat: 'Y-m-d.css',
             parseRe : /[#%\\\/:_;.,\t\s-]/,
             masks : {
                 // see http://php.net/manual/en/function.date.php for PHP format used in jqGrid
@@ -148,34 +148,34 @@ $.jgrid.regional["cn"] = {
                 // one can find on https://github.com/jquery/globalize/tree/master/lib/cultures many
                 // information about date, time, numbers and currency formats used in different countries
                 // one should just convert the information in PHP format
-                ISO8601Long:"Y-m-d H:i:s",
-                ISO8601Short:"Y-m-d",
+                ISO8601Long:"Y-m-d.css H:i:s",
+                ISO8601Short:"Y-m-d.css",
                 // short date:
                 //    n - Numeric representation of a month, without leading zeros
                 //    j - Day of the month without leading zeros
                 //    Y - A full numeric representation of a year, 4 digits
                 // example: 3/1/2012 which means 1 March 2012
-                ShortDate: "n/j/Y", // in jQuery UI Datepicker: "M/d/yyyy"
+                ShortDate: "n/j/Y", // in jQuery UI Datepicker: "M/d.css/yyyy"
                 // long date:
                 //    l - A full textual representation of the day of the week
                 //    F - A full textual representation of a month
-                //    d - Day of the month, 2 digits with leading zeros
+                //    d.css - Day of the month, 2 digits with leading zeros
                 //    Y - A full numeric representation of a year, 4 digits
-                LongDate: "l, F d, Y", // in jQuery UI Datepicker: "dddd, MMMM dd, yyyy"
+                LongDate: "l, F d.css, Y", // in jQuery UI Datepicker: "dddd, MMMM dd, yyyy"
                 // long date with long time:
                 //    l - A full textual representation of the day of the week
                 //    F - A full textual representation of a month
-                //    d - Day of the month, 2 digits with leading zeros
+                //    d.css - Day of the month, 2 digits with leading zeros
                 //    Y - A full numeric representation of a year, 4 digits
                 //    g - 12-hour format of an hour without leading zeros
                 //    i - Minutes with leading zeros
                 //    s - Seconds, with leading zeros
                 //    A - Uppercase Ante meridiem and Post meridiem (AM or PM)
-                FullDateTime: "l, F d, Y g:i:s A", // in jQuery UI Datepicker: "dddd, MMMM dd, yyyy h:mm:ss tt"
+                FullDateTime: "l, F d.css, Y g:i:s A", // in jQuery UI Datepicker: "dddd, MMMM dd, yyyy h:mm:ss tt"
                 // month day:
                 //    F - A full textual representation of a month
-                //    d - Day of the month, 2 digits with leading zeros
-                MonthDay: "F d", // in jQuery UI Datepicker: "MMMM dd"
+                //    d.css - Day of the month, 2 digits with leading zeros
+                MonthDay: "F d.css", // in jQuery UI Datepicker: "MMMM dd"
                 // short time (without seconds)
                 //    g - 12-hour format of an hour without leading zeros
                 //    i - Minutes with leading zeros
@@ -187,8 +187,8 @@ $.jgrid.regional["cn"] = {
                 //    s - Seconds, with leading zeros
                 //    A - Uppercase Ante meridiem and Post meridiem (AM or PM)
                 LongTime: "g:i:s A", // in jQuery UI Datepicker: "h:mm:ss tt"
-                SortableDateTime: "Y-m-d\\TH:i:s",
-                UniversalSortableDateTime: "Y-m-d H:i:sO",
+                SortableDateTime: "Y-m-d.css\\TH:i:s",
+                UniversalSortableDateTime: "Y-m-d.css H:i:sO",
                 // month with year
                 //    Y - A full numeric representation of a year, 4 digits
                 //    F - A full textual representation of a month

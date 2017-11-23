@@ -39,12 +39,12 @@
 		insert into bus_rule
 		(
 			`insurance_type`, 
-			`rule_text`
+			`demo_text`
 		)
 		values
 		(
 			#{insuranceType}, 
-			#{ruleText}
+			#{demoText}
 		)
 	</insert>
 	 

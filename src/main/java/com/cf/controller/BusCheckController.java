@@ -10,6 +10,7 @@ import com.baidu.aip.nlp.AipNlp;
 import com.baidu.aip.speech.AipSpeech;
 import com.cf.entity.BusRuleEntity;
 import com.cf.service.BusRuleService;
+import com.cf.service.SysConfigService;
 import com.cf.utils.*;
 import it.sauronsoftware.jave.EncoderException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -48,6 +49,9 @@ public class BusCheckController {
 
 	@Autowired
 	private  BaiduApiUtil baiduApiUtil;
+
+	@Autowired
+	private SysConfigService sysConfigService;
 	
 	/**
 	 * 列表
@@ -55,6 +59,8 @@ public class BusCheckController {
 	@RequestMapping("/list")
 	@RequiresPermissions("buscheck:list")
 	public R list(@RequestParam Map<String, Object> params){
+		logger.info("质检得分：{}",baiduApiUtil.compareSimilarDegree("今天2017年12月17日，销售人员张天爱，公司平安人寿杭州分公司，执业证号XX008，产品名称平安护身福终身寿险分红型,投保人为张凯，被保人为刘斌，投保人是被保险人的爸爸。","今天是2017年11月17日，地点：浙江省，销售人员张三，所属公司平安人寿大连分公司，执业证号AX009，产品名称平安护身福终身寿险（分红型）。投保人为张三，被保人为张三，投保人是被保险人的丈夫。"));
+
 		//查询列表数据
         Query query = new Query(params);
 
@@ -66,7 +72,9 @@ public class BusCheckController {
 		return R.ok().put("page", pageUtil);
 	}
 	
-	
+
+
+
 	/**
 	 * 信息
 	 */
@@ -114,26 +122,45 @@ public class BusCheckController {
 
 	/**
 	 * 文件上传具体实现方法（单文件上传）
-	 * @param file
+	 * @param files
 	 * @return
 	 */
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public String upload(@RequestParam("file") MultipartFile file,@RequestParam("wavName") String file_name,Integer ruleId) {
-		if (file.isEmpty()) throw new RRException("上传的文件为空，请重新上传...",202);
+	public String upload(@RequestParam("files[]") String[] files,Integer ruleId) {
+		for (String file:files) {
+			String fileType = file.substring(file.indexOf("/")+1,file.indexOf(";"));
+
+			int start = file.indexOf(",");
+//			$img= substr($img,$start+1);
+//			$img = str_replace(' ', '+', $img);
+			String file2 = file.substring(start+1).replace(' ', '+');
+
+
+			String targetFilePath = sysConfigService.queryObject(2L).getValue()+"/"+FileUtil.createFileName();
 			try {
-				String wavPath = Save2Disk(file, file_name);//保存到磁盘
-				String content = baiduApiUtil.Speed2Text(wavPath);//语音识别内容
-				BusRuleEntity rule = busRuleService.queryObject(ruleId);//通过ruleID获取规则内容
-				String standard_text = rule.getStandardText();
-				String degree = baiduApiUtil.compareSimilarDegree(content,standard_text);
-				return degree;
-			} catch (FileNotFoundException e) {
+				FileUtil.toFile(file2,targetFilePath+"."+fileType);
+			} catch (Exception e) {
 				e.printStackTrace();
-				return "上传失败," + e.getMessage();
-			} catch (IOException e) {
-				e.printStackTrace();
-				return "上传失败," + e.getMessage();
 			}
+		}
+
+//		System.out.println(files[0]);
+		return "";
+//		if (files.isEmpty()) throw new RRException("上传的文件为空，请重新上传...",202);
+//			try {
+//				String wavPath = Save2Disk(files[0], "file_name");//保存到磁盘
+//				String content = baiduApiUtil.Speed2Text(wavPath);//语音识别内容
+//				BusRuleEntity rule = busRuleService.queryObject(ruleId);//通过ruleID获取规则内容
+//				String standard_text = rule.getStandardText();
+//				String degree = baiduApiUtil.compareSimilarDegree(content,standard_text);
+//				return degree;
+//			} catch (FileNotFoundException e) {
+//				e.printStackTrace();
+//				return "上传失败," + e.getMessage();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//				return "上传失败," + e.getMessage();
+//			}
 //		} else {
 //			return "上传失败，因为文件是空的.";
 //		}

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>音频质检列表</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="../public/css/bootstrap.min.css">
+<link rel="stylesheet" href="../public/css/font-awesome.min.css">
+<link rel="stylesheet" href="../public/plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet" href="../public/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../public/css/main.css">
+<link rel="stylesheet" href="../public/css/jquery.mloading.css">
+<script src="../public/libs/jquery.min.js"></script>
+<script src="../public/plugins/layer/layer.js"></script>
+<script src="../public/libs/bootstrap.min.js"></script>
+<script src="../public/libs/vue.min.js"></script>
+<script src="../public/plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../public/plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../public/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../public/js/common.js"></script>
+<script src="../public/js/jquery.mloading.js"></script>
+</head>
+<body>
+<div id="loading"></div>
+<div id="rrapp" v-cloak  v-show="!showDetail">
+	<div v-show="showList">
+		<div class="grid-btn">
+			<a v-if="hasPermission('busvoicelist:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<a id="btnRecognize" v-if="hasPermission('busvoicelist:recognize')" class="btn btn-primary" @click="recognize"><i class="fa fa-pencil-square-o"></i>&nbsp;识别</a>
+			<a v-if="hasPermission('busrulelist:delete')" class="btn btn-primary pull-right" @click="openDetail"><i class="fa"></i>&nbsp;查看详细得分</a>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+											<div class="form-group">
+			   	<div class="col-sm-2 control-label">销售员姓名</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="busVoiceList.salerName" placeholder="销售员姓名"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">规则ID</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="busVoiceList.ruleId" placeholder="规则ID"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">音频url</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="busVoiceList.fileUrl" placeholder="音频url"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">是否已经识别</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="busVoiceList.isDone" placeholder="是否已经识别"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">得分</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="busVoiceList.score" placeholder="得分"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">识别时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="busVoiceList.recgnizeTime" placeholder="识别时间"/>
+			    </div>
+			</div>
+							<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+<div id="rrappDetail" v-cloak  v-show="showDetail">
+	<div v-show="showList">
+		<div class="grid-btn">
+			<a class="btn btn-primary pull-right" @click="backMain"><i class="fa"></i>&nbsp;返回</a>
+		</div>
+		<table id="jqGridDetail"></table>
+		<div id="jqGridPagerDetail"></div>
+	</div>
+
+	<div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" hidden="true">
+				<div class="col-sm-2 control-label">分段ID</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="busRuleSttList.ruleListId" placeholder="分段ID"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">业务员姓名</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="busRuleSttList.salerName" placeholder="业务员姓名"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">文本</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="busRuleSttList.ruleName" placeholder=""/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">语音识别文本</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="busRuleSttList.tts" placeholder="语音识别文本"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">权重</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="busRuleSttList.weight" placeholder="权重"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">得分</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="busRuleSttList.score" placeholder="得分"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div>
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+<script src="../public/js/generator/busvoicelist.js"></script>
+<script src="../public/js/generator/busrulesttlist.js"></script>
+</body>
+</html>

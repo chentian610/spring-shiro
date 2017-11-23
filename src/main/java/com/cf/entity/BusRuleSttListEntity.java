@@ -6,11 +6,11 @@ import java.util.Date;
 
 
 /**
- * 
+ * 识别结果明细列表
  * 
  * @author cf
  * @email 100@qq.com
- * @date 2017-11-21 13:59:30
+ * @date 2017-11-22 19:25:59
  */
 public class BusRuleSttListEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -18,11 +18,17 @@ public class BusRuleSttListEntity implements Serializable {
 	//主键，自增长
 	private Integer id;
 	//分段ID
+	private Integer voiceId;
+	//分段ID
 	private Integer ruleListId;
-	//业务员ID
-	private Integer salerId;
+	//业务员姓名
+	private Integer salerName;
+	//
+	private String demoText;
 	//语音识别文本
 	private String tts;
+	//权重
+	private Integer weight;
 	//得分
 	private Double score;
 	//创建时间
@@ -61,16 +67,28 @@ public class BusRuleSttListEntity implements Serializable {
 		return ruleListId;
 	}
 	/**
-	 * 设置：业务员ID
+	 * 设置：业务员姓名
 	 */
-	public void setSalerId(Integer salerId) {
-		this.salerId = salerId;
+	public void setSalerName(Integer salerName) {
+		this.salerName = salerName;
 	}
 	/**
-	 * 获取：业务员ID
+	 * 获取：业务员姓名
 	 */
-	public Integer getSalerId() {
-		return salerId;
+	public Integer getSalerName() {
+		return salerName;
+	}
+	/**
+	 * 设置：
+	 */
+	public void setDemoText(String demoText) {
+		this.demoText = demoText;
+	}
+	/**
+	 * 获取：
+	 */
+	public String getDemoText() {
+		return demoText;
 	}
 	/**
 	 * 设置：语音识别文本
@@ -83,6 +101,18 @@ public class BusRuleSttListEntity implements Serializable {
 	 */
 	public String getTts() {
 		return tts;
+	}
+	/**
+	 * 设置：权重
+	 */
+	public void setWeight(Integer weight) {
+		this.weight = weight;
+	}
+	/**
+	 * 获取：权重
+	 */
+	public Integer getWeight() {
+		return weight;
 	}
 	/**
 	 * 设置：得分
@@ -155,5 +185,13 @@ public class BusRuleSttListEntity implements Serializable {
 	 */
 	public Integer getVersion() {
 		return version;
+	}
+
+	public Integer getVoiceId() {
+		return voiceId;
+	}
+
+	public void setVoiceId(Integer voiceId) {
+		this.voiceId = voiceId;
 	}
 }

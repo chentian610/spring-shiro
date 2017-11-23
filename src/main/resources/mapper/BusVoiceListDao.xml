@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cf.dao.BusVoiceListDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.cf.entity.BusVoiceListEntity" id="busVoiceListMap">
+        <result property="id" column="id"/>
+        <result property="salerName" column="saler_name"/>
+        <result property="ruleId" column="rule_id"/>
+        <result property="fileUrl" column="file_url"/>
+        <result property="isDone" column="is_done"/>
+        <result property="score" column="score"/>
+        <result property="recgnizeTime" column="recgnize_time"/>
+		<result property="recgnizeText" column="recgnize_text"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.cf.entity.BusVoiceListEntity">
+		select * from bus_voice_list where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.cf.entity.BusVoiceListEntity">
+		select * from bus_voice_list
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from bus_voice_list 
+	</select>
+	 
+	<insert id="save" parameterType="com.cf.entity.BusVoiceListEntity">
+		insert into bus_voice_list
+		(
+			`id`, 
+			`saler_name`, 
+			`rule_id`, 
+			`file_url`, 
+			`is_done`, 
+			`score`,
+			`recgnize_text`,
+			`recgnize_time`
+		)
+		values
+		(
+			#{id}, 
+			#{salerName}, 
+			#{ruleId}, 
+			#{fileUrl}, 
+			#{isDone}, 
+			#{score},
+			#{recgnizeText},
+			#{recgnizeTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.cf.entity.BusVoiceListEntity">
+		update bus_voice_list 
+		<set>
+			<if test="salerName != null">`saler_name` = #{salerName}, </if>
+			<if test="ruleId != null">`rule_id` = #{ruleId}, </if>
+			<if test="fileUrl != null">`file_url` = #{fileUrl}, </if>
+			<if test="isDone != null">`is_done` = #{isDone}, </if>
+			<if test="score != null">`score` = #{score}, </if>
+			<if test="recgnizeText != null">`recgnize_text` = #{recgnizeText}, </if>
+			<if test="recgnizeTime != null">`recgnize_time` = #{recgnizeTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from bus_voice_list where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from bus_voice_list where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

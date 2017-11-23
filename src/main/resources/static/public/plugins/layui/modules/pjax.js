@@ -16,7 +16,7 @@ layui.define(['jquery'], function(exports) {
 		// itself.
 		//
 		// Tries to make sure the back button and ctrl+click work the way
-		// you'd expect.
+		// you'd.css expect.
 		//
 		// Exported as $.fn.pjax
 		//
@@ -187,7 +187,7 @@ layui.define(['jquery'], function(exports) {
 			var context = options.context = findContainerFor(options.container)
 
 			// We want the browser to maintain two separate internal caches: one
-			// for pjax'd partial page loads and one for normal page loads.
+			// for pjax'd.css partial page loads and one for normal page loads.
 			// Without adding this secret parameter, some browsers will often
 			// confuse the two.
 			if(!options.data) options.data = {}
@@ -576,7 +576,7 @@ layui.define(['jquery'], function(exports) {
 
 		function cloneContents(container) {
 			var cloned = container.clone()
-				// Unmark script tags as already being eval'd so they can get executed again
+				// Unmark script tags as already being eval'd.css so they can get executed again
 				// when restored from cache. HAXX: Uses jQuery internal method.
 			cloned.find('script').each(function() {
 				if(!this.src) jQuery._data(this, 'globalEval', false)

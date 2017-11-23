@@ -40,12 +40,13 @@ new Vue({
         },
         uploadImage: function() {
             console.log(this.images);
-            return false;
+            // return false;
             var obj = {};
-            obj.images=this.images
+            obj.files=this.images;
+            obj.ruleId = 1;
             $.ajax({
                 type: 'post',
-                url: "upload.php",
+                url: "../buscheck/upload",
                 data: obj,
                 dataType: "json",
                 success: function(data) {

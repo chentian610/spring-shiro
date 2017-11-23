@@ -1,18 +1,11 @@
 $(function () {
-    $("#jqGrid").jqGrid({
+    $("#jqGridDetail").jqGrid({
         url: '../busrulesttlist/list',
-        datatype: "json",
+        datatype: "local",
         colModel: [			
-			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '分段ID', name: 'ruleListId', index: 'rule_list_id', width: 80 }, 			
-			{ label: '业务员ID', name: 'salerId', index: 'saler_id', width: 80 }, 			
-			{ label: '语音识别文本', name: 'tts', index: 'tts', width: 80 }, 			
+			{ label: '内容', name: 'demoText', index: 'demo_text', width: 600 },
+			{ label: '权重', name: 'weight', index: 'weight', width: 80 },
 			{ label: '得分', name: 'score', index: 'score', width: 80 }, 			
-			{ label: '创建时间', name: 'createTime', index: 'create_time', width: 80 }, 			
-			{ label: '创建人', name: 'createBy', index: 'create_by', width: 80 }, 			
-			{ label: '更新时间', name: 'updateTime', index: 'update_time', width: 80 }, 			
-			{ label: '更新人', name: 'updateBy', index: 'update_by', width: 80 }, 			
-			{ label: '版本号', name: 'version', index: 'version', width: 80 }			
         ],
 		viewrecords: true,
         height: 385,
@@ -22,7 +15,7 @@ $(function () {
         rownumWidth: 25, 
         autowidth:true,
         multiselect: true,
-        pager: "#jqGridPager",
+        pager: "#jqGridPagerDetail",
         jsonReader : {
             root: "page.list",
             page: "page.currPage",
@@ -36,47 +29,48 @@ $(function () {
         },
         gridComplete:function(){
         	//隐藏grid底部滚动条
-        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+        	$("#jqGridDetail").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
         }
     });
 });
 
-var vm = new Vue({
-	el:'#rrapp',
+var vmDetail = new Vue({
+	el:'#rrappDetail',
 	data:{
+        showDetail: false,
 		showList: true,
 		title: null,
 		busRuleSttList: {}
 	},
 	methods: {
 		query: function () {
-			vm.reload();
+            vmDetail.reload();
 		},
 		add: function(){
-			vm.showList = false;
-			vm.title = "新增";
-			vm.busRuleSttList = {};
+            vmDetail.showList = false;
+            vmDetail.title = "新增";
+            vmDetail.busRuleSttList = {};
 		},
 		update: function (event) {
 			var id = getSelectedRow();
 			if(id == null){
 				return ;
 			}
-			vm.showList = false;
-            vm.title = "修改";
-            
-            vm.getInfo(id)
+            vmDetail.showList = false;
+            vmDetail.title = "修改";
+
+            vmDetail.getInfo(id)
 		},
 		saveOrUpdate: function (event) {
-			var url = vm.busRuleSttList.id == null ? "../busrulesttlist/save" : "../busrulesttlist/update";
+			var url = vmDetail.busRuleSttList.id == null ? "../busrulesttlist/save" : "../busrulesttlist/update";
 			$.ajax({
 				type: "POST",
 			    url: url,
-			    data: JSON.stringify(vm.busRuleSttList),
+			    data: JSON.stringify(vmDetail.busRuleSttList),
 			    success: function(r){
 			    	if(r.code === 0){
 						alert('操作成功', function(index){
-							vm.reload();
+							vmDetail.reload();
 						});
 					}else{
 						alert(r.msg);
@@ -109,15 +103,19 @@ var vm = new Vue({
 		},
 		getInfo: function(id){
 			$.get("../busrulesttlist/info/"+id, function(r){
-                vm.busRuleSttList = r.busRuleSttList;
+                vmDetail.busRuleSttList = r.busRuleSttList;
             });
 		},
 		reload: function (event) {
-			vm.showList = true;
-			var page = $("#jqGrid").jqGrid('getGridParam','page');
-			$("#jqGrid").jqGrid('setGridParam',{ 
+			vmDetail.showList = true;
+			var page = $("#jqGridDetail").jqGrid('getGridParam','page');
+			$("#jqGridDetail").jqGrid('setGridParam',{
                 page:page
             }).trigger("reloadGrid");
-		}
+		},
+        backMain: function (event) {
+            vm.showDetail = false;
+            vmDetail.showDetail = false;
+        }
 	}
 });

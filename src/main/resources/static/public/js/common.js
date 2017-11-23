@@ -71,7 +71,7 @@ function getSelectedRowByGridName(jqGrid) {
 }
 
 //选择一条记录
-function getSelectedRow(grid) {
+function getSelectedRow() {
     var grid = $("#jqGrid");
     var rowKey = grid.getGridParam("selrow");
     if(!rowKey){
@@ -96,7 +96,6 @@ function getSelectedRowsByGridName(jqGrid) {
         alert("请选择一条记录");
         return ;
     }
-
     return grid.getGridParam("selarrrow");
 }
 
@@ -108,6 +107,5 @@ function getSelectedRows() {
         alert("请选择一条记录");
         return ;
     }
-
     return grid.getGridParam("selarrrow");
 }

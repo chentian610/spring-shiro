@@ -4,9 +4,8 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 10, key: true },
-			{ label: '保险名称', name: 'insuranceType', index: 'insurance_type', width: 30 },
-			{ label: '规则', name: 'ruleText', index: 'rule_text', width: 80 },
-            { label: '例子', name: 'demoText', index: 'demo_text', width: 80 }
+			{ label: '项目名称', name: 'insuranceType', index: 'insurance_type', width: 30 },
+            { label: '规则例子', name: 'demoText', index: 'demo_text', width: 80 }
         ],
 		viewrecords: true,
         height: 385,
