@@ -126,7 +126,7 @@ var vm = new Vue({
                 return ;
             }
             for (var i=0;i<ids.length;i++) {
-                if ($("#jqGrid").getCell(ids[i],"isDone") ==1) {
+                if ($("#jqGrid").getCell(ids[i],"isDone") == "已识别") {
                     alert("音频已经检测，不能重复检测......");
                     return;
                 }
